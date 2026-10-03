@@ -1,0 +1,18 @@
+bin/
+obj/
+artifacts/
+.vs/
+*.user
+*.suo
+Directory.Build.props.local
+catalog.json*
+build.log
+GitHubPublish.local.json
+*.ymmp
+*.ymme
+*.zip
+.env
+.env.*
+# Deliberate, original historical packages (other generated packages stay ignored).
+!archive/**/*.zip
+!archive/**/*.ymme

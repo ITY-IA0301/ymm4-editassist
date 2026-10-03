@@ -1,0 +1,118 @@
+<UserControl x:Class="EditAssist.Plugin.TimelineWorkbench"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Loaded="OnLoaded" Unloaded="OnUnloaded" DataContextChanged="OnContextChanged"
+ Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+ Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+ <Grid Margin="12">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <TextBlock x:Name="ConnectionText" Text="タイムラインへの接続を待っています。" TextWrapping="Wrap" Margin="0,0,0,6"/>
+  <WrapPanel Grid.Row="1">
+   <Button Content="一覧を更新" Click="OnRefresh"/>
+   <Button Content="直前の変更を復元" Click="OnRestore"/>
+   <Button Content="プロジェクトを別名で保存" Click="OnExportCopy"/>
+   <Button Content="バックアップの場所" Click="OnOpenBackups"/>
+   <Button x:Name="CancelButton" Content="処理を中止" Click="OnCancel" IsEnabled="False"/>
+  </WrapPanel>
+  <TabControl x:Name="WorkTabs" Grid.Row="2">
+   <TabItem Header="選択・レイヤー・尺">
+    <Grid Margin="8">
+     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+     <WrapPanel>
+      <StackPanel Width="120"><TextBlock Text="種類"/><ComboBox x:Name="KindFilter" SelectedIndex="0" SelectionChanged="OnFilterChanged"><ComboBoxItem Content="ボイスのみ"/><ComboBoxItem Content="テキスト"/><ComboBoxItem Content="画像"/><ComboBoxItem Content="動画"/><ComboBoxItem Content="音声ファイル"/><ComboBoxItem Content="すべて"/></ComboBox></StackPanel>
+      <StackPanel Width="160"><TextBlock Text="キャラ（空欄＝全員）"/><ComboBox x:Name="CharacterFilter" IsEditable="True" SelectionChanged="OnFilterChanged" TextBoxBase.TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="110"><TextBlock Text="開始フレーム"/><TextBox x:Name="FromFrameBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="110"><TextBlock Text="終了（含まない）"/><TextBox x:Name="ToFrameBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="90"><TextBlock Text="元レイヤーから"/><TextBox x:Name="FromLayerBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="90"><TextBlock Text="元レイヤーまで"/><TextBox x:Name="ToLayerBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="220"><TextBlock Text="セリフ・素材名（部分一致）"/><TextBox x:Name="ContentQueryBox" TextChanged="OnFilterChanged"/></StackPanel>
+     </WrapPanel>
+     <WrapPanel Grid.Row="1">
+      <Button Content="条件に合う素材をYMM4で選択" Click="OnSelect"/>
+      <ComboBox x:Name="MoveMode" SelectedIndex="0" Width="140" SelectionChanged="OnFilterChanged"><ComboBoxItem Content="指定レイヤーへ"/><ComboBoxItem Content="現在位置から移動"/></ComboBox>
+      <TextBox x:Name="LayerValueBox" Width="65" Text="0" TextChanged="OnFilterChanged"/>
+      <Button Content="レイヤー変更を確認" Click="OnPrepareMove"/>
+      <Button Content="音声実長への尺調整を確認" Click="OnPrepareFit"/>
+     </WrapPanel>
+     <StackPanel Grid.Row="2">
+      <CheckBox x:Name="RippleBox" Content="尺調整時、指定範囲内の後続素材も追従（種類・キャラを問わず。境界をまたぐ動画は事前に分割が必要）" Margin="0,3,0,6" Checked="OnFilterChanged" Unchecked="OnFilterChanged"/>
+      <TextBlock Text="レイヤー番号は0から。ロック中は除外。ボイスに含まれる字幕も移動します。分割音声・速度アニメーションは尺調整から除外します。" TextWrapping="Wrap"/>
+      <Expander x:Name="CharacterLayerExpander" Header="キャラごとにレイヤーを振り分ける" Margin="0,6,0,4">
+       <StackPanel>
+        <TextBlock Text="現在の条件に合うボイスを対象にします。空欄のキャラは動かしません。変更が必要なロック素材があると全件停止します。" TextWrapping="Wrap"/>
+        <WrapPanel><Button Content="条件からキャラ一覧を作る" Click="OnBuildCharacterLayers"/><Button Content="キャラ別の変更を確認" Click="OnPrepareCharacterLayers"/></WrapPanel>
+        <DataGrid x:Name="CharacterLayersGrid" Height="115" AutoGenerateColumns="False" CanUserAddRows="False">
+         <DataGrid.Columns>
+          <DataGridTextColumn Header="キャラ" Binding="{Binding Character}" IsReadOnly="True" Width="*" MinWidth="150"/>
+          <DataGridTextColumn Header="対象ボイス数（ロック含む）" Binding="{Binding Clips}" IsReadOnly="True" Width="210" MinWidth="210"/>
+          <DataGridTextColumn Header="移動先レイヤー（空欄＝そのまま）" Binding="{Binding DestinationLayer, UpdateSourceTrigger=PropertyChanged}" Width="280" MinWidth="280"/>
+         </DataGrid.Columns>
+        </DataGrid>
+       </StackPanel>
+      </Expander>
+     </StackPanel>
+     <ListView x:Name="TargetList" Grid.Row="3" Margin="0,8,0,0" SelectionMode="Extended" VirtualizingPanel.IsVirtualizing="True">
+      <ListView.View><GridView>
+       <GridViewColumn Header="種類" Width="65" DisplayMemberBinding="{Binding Kind}"/><GridViewColumn Header="キャラ" Width="110" DisplayMemberBinding="{Binding Character}"/>
+       <GridViewColumn Header="開始" Width="75" DisplayMemberBinding="{Binding Frame}"/><GridViewColumn Header="長さ" Width="70" DisplayMemberBinding="{Binding Length}"/><GridViewColumn Header="レイヤー" Width="75" DisplayMemberBinding="{Binding Layer}"/>
+       <GridViewColumn Header="内容" Width="320" DisplayMemberBinding="{Binding Label}"/>
+      </GridView></ListView.View>
+     </ListView>
+    </Grid>
+   </TabItem>
+   <TabItem Header="字幕・音量プリセット">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="12">
+     <TextBlock Text="対象は左の条件に一致するボイス／テキスト。空欄は変更しません。サイズ・位置・音量は固定値です。" TextWrapping="Wrap"/>
+     <WrapPanel><Button Content="YMM4の選択素材から取得" Click="OnCapturePreset"/><Button Content="プリセットを開く" Click="OnLoadPreset"/><Button Content="プリセットを保存" Click="OnSavePreset"/></WrapPanel>
+     <WrapPanel>
+      <StackPanel Width="180"><TextBlock Text="プリセット名"/><TextBox x:Name="PresetNameBox" Text="プリセット" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="180"><TextBlock Text="フォント名"/><TextBox x:Name="FontBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="90"><TextBlock Text="サイズ"/><TextBox x:Name="FontSizeBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="120"><TextBlock Text="文字色 #RRGGBB"/><TextBox x:Name="ColorBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="120"><TextBlock Text="太字"/><ComboBox x:Name="BoldBox" SelectedIndex="0" SelectionChanged="OnFilterChanged"><ComboBoxItem Content="変更しない"/><ComboBoxItem Content="太字にする"/><ComboBoxItem Content="太字を解除"/></ComboBox></StackPanel>
+     </WrapPanel>
+     <WrapPanel>
+      <StackPanel Width="110"><TextBlock Text="音量 %（ボイス）"/><TextBox x:Name="VolumeBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="110"><TextBlock Text="字幕 X"/><TextBox x:Name="XBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="110"><TextBlock Text="字幕 Y"/><TextBox x:Name="YBox" TextChanged="OnFilterChanged"/></StackPanel>
+     </WrapPanel>
+     <CheckBox x:Name="ReplaceAnimationBox" Content="該当項目の既存アニメーションを固定値で上書きしてよい" Checked="OnFilterChanged" Unchecked="OnFilterChanged" Margin="0,8,0,8"/>
+     <Button Content="プリセット適用を確認" Click="OnPreparePreset" HorizontalAlignment="Left"/>
+    </StackPanel></ScrollViewer>
+   </TabItem>
+   <TabItem Header="台本取り込み">
+    <Grid Margin="10"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="130"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+     <StackPanel><TextBlock Text="UTF-8のCSV／TSV、2列：キャラ名,セリフ。別名のキャラは下でYMM4のキャラ名に割り当てます。" TextWrapping="Wrap"/><WrapPanel><Button Content="台本を開く（UTF-8）" Click="OnLoadScript"/><Button Content="解析・割り当て一覧を作る" Click="OnParseScript"/></WrapPanel></StackPanel>
+     <TextBox x:Name="ScriptBox" Grid.Row="1" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextChanged="OnScriptChanged"/>
+     <TextBlock x:Name="CharacterNamesText" Grid.Row="2" TextWrapping="Wrap"/>
+     <DataGrid x:Name="MappingGrid" Grid.Row="3" AutoGenerateColumns="False" CanUserAddRows="False" TextBoxBase.TextChanged="OnFilterChanged"><DataGrid.Columns><DataGridTextColumn Header="台本のキャラ名" Binding="{Binding Source}" IsReadOnly="True" Width="*"/><DataGridTextColumn Header="YMM4のキャラ名（編集可）" Binding="{Binding Destination, UpdateSourceTrigger=PropertyChanged}" Width="*"/></DataGrid.Columns></DataGrid>
+     <WrapPanel Grid.Row="4">
+      <StackPanel Width="120"><TextBlock Text="開始フレーム"/><TextBox x:Name="ScriptStartBox" Text="0" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="120"><TextBlock Text="レイヤー（空欄＝キャラ設定）"/><TextBox x:Name="ScriptLayerBox" TextChanged="OnFilterChanged"/></StackPanel>
+      <StackPanel Width="110"><TextBlock Text="セリフ間隔（フレーム）"/><TextBox x:Name="ScriptGapBox" Text="0" TextChanged="OnFilterChanged"/></StackPanel>
+      <Button Content="音声を生成して配置を確認" Click="OnPrepareScript" VerticalAlignment="Bottom"/>
+     </WrapPanel>
+    </Grid>
+   </TabItem>
+   <TabItem Header="編集チェック・変更確認">
+    <Grid Margin="10"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+     <WrapPanel><Button Content="欠損・重なり・空白をチェック" Click="OnCheck"/><TextBlock Text="空白の閾値（フレーム）" VerticalAlignment="Center"/><TextBox x:Name="GapThresholdBox" Text="60" Width="75"/></WrapPanel>
+     <TextBlock x:Name="PlanTitleText" Grid.Row="1" Text="変更プレビューはまだありません。" TextWrapping="Wrap"/>
+     <StackPanel x:Name="CheckResultsPanel" Grid.Row="2" Visibility="Collapsed">
+      <Button Content="選んだ素材の開始位置へ移動" Click="OnNavigateIssue" HorizontalAlignment="Left"/>
+      <DataGrid x:Name="CheckIssuesGrid" Height="180" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single" MouseDoubleClick="OnNavigateIssue">
+       <DataGrid.Columns>
+        <DataGridTextColumn Header="種別" Binding="{Binding Severity}" Width="55" MinWidth="55"/><DataGridTextColumn Header="素材番号" Binding="{Binding Key}" Width="65" MinWidth="65"/>
+        <DataGridTextColumn Header="開始" Binding="{Binding Frame}" Width="65" MinWidth="65"/><DataGridTextColumn Header="素材・セリフ" Binding="{Binding Label}" Width="165" MinWidth="165"/>
+        <DataGridTextColumn Header="内容" Binding="{Binding Message}" Width="*" MinWidth="240"/>
+       </DataGrid.Columns>
+      </DataGrid>
+     </StackPanel>
+     <TextBox x:Name="PlanOutput" Grid.Row="3" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+     <StackPanel Grid.Row="4"><CheckBox x:Name="AllowWarningsBox" Content="表示された重なり・個別設定等の注意事項を確認し、変更を許可する（エラーは実行不可）" Margin="0,6,0,6"/><Button Content="確認した変更を実行（バックアップ付き）" Click="OnApply" HorizontalAlignment="Left"/></StackPanel>
+    </Grid>
+   </TabItem>
+  </TabControl>
+  <TextBlock x:Name="StatusText" Grid.Row="3" Text="本番プロジェクトのコピーで試してください。自動保存や元ファイルの変更は行いません。" TextWrapping="Wrap" Margin="0,8,0,0"/>
+ </Grid>
+</UserControl>

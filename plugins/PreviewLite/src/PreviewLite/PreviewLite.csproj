@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>YMM4.PreviewLite</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="YukkuriMovieMaker"><HintPath>$(Ymm4Directory)\YukkuriMovieMaker.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="YukkuriMovieMaker.Plugin"><HintPath>$(Ymm4Directory)\YukkuriMovieMaker.Plugin.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>..\..\vendor\0Harmony.dll</HintPath><Private>true</Private></Reference>
+    <InternalsVisibleTo Include="PreviewLite.Checks" />
+  </ItemGroup>
+  <Target Name="CheckHost" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(Ymm4Directory)\YukkuriMovieMaker.Plugin.dll')" Text="Specify Ymm4Directory pointing to YMM4 4.56.1.1." />
+  </Target>
+</Project>

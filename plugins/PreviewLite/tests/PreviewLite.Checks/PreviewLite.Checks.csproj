@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+ <ItemGroup>
+  <Reference Include="YukkuriMovieMaker"><HintPath>$(Ymm4Directory)\YukkuriMovieMaker.dll</HintPath><Private>false</Private></Reference>
+  <Reference Include="YukkuriMovieMaker.Plugin"><HintPath>$(Ymm4Directory)\YukkuriMovieMaker.Plugin.dll</HintPath><Private>false</Private></Reference>
+  <ProjectReference Include="..\..\src\PreviewLite\PreviewLite.csproj" />
+  <Reference Include="0Harmony"><HintPath>..\..\vendor\0Harmony.dll</HintPath><Private>true</Private></Reference>
+ </ItemGroup>
+</Project>

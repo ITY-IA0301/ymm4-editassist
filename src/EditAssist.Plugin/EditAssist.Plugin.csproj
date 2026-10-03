@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net$(RuntimeMajor).0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <AssemblyName>YMM4.EditAssist</AssemblyName>
+    <RootNamespace>EditAssist.Plugin</RootNamespace>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="EditAssist.WindowsChecks" />
+    <Reference Include="YukkuriMovieMaker"><HintPath>$(Ymm4Directory)\YukkuriMovieMaker.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="YukkuriMovieMaker.Settings"><HintPath>$(Ymm4Directory)\YukkuriMovieMaker.Settings.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>$(Ymm4Directory)\Newtonsoft.Json.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="ReactiveProperty"><HintPath>$(Ymm4Directory)\ReactiveProperty.dll</HintPath><Private>false</Private></Reference>
+    <ProjectReference Include="..\EditAssist.Core\EditAssist.Core.csproj" />
+    <Reference Include="YukkuriMovieMaker.Plugin">
+      <HintPath>$(Ymm4Directory)\YukkuriMovieMaker.Plugin.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="YukkuriMovieMaker.Controls">
+      <HintPath>$(Ymm4Directory)\YukkuriMovieMaker.Controls.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <Target Name="CheckYmm4Reference" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(Ymm4Directory)\YukkuriMovieMaker.Plugin.dll')"
+      Text="YMM4本体のDLLが見つかりません。Build.ps1でYukkuriMovieMaker.exeのあるフォルダを指定してください。" />
+  </Target>
+</Project>
+

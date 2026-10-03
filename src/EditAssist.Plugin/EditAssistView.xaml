@@ -1,0 +1,189 @@
+<UserControl x:Class="EditAssist.Plugin.EditAssistView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="clr-namespace:EditAssist.Plugin"
+  MinWidth="860" MinHeight="560" Width="1040" Height="720"
+  Loaded="OnLoaded" Unloaded="OnUnloaded"
+  Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+  Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+  <UserControl.Resources>
+    <Style TargetType="Button">
+      <Setter Property="Padding" Value="10,5" />
+      <Setter Property="Margin" Value="0,0,7,5" />
+      <Setter Property="MinHeight" Value="30" />
+    </Style>
+    <Style TargetType="TextBox">
+      <Setter Property="Padding" Value="5" />
+      <Setter Property="Margin" Value="0,3,0,8" />
+    </Style>
+    <Style TargetType="ComboBox">
+      <Setter Property="Padding" Value="5" />
+      <Setter Property="Margin" Value="0,3,8,8" />
+    </Style>
+  </UserControl.Resources>
+  <Grid Margin="16">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <StackPanel Margin="0,0,0,10">
+      <TextBlock Text="EditAssist" FontSize="24" FontWeight="SemiBold" />
+      <TextBlock Text="ボイス整理・台本・プリセット・素材・動画参照・診断　／　開発版 0.4.0" Margin="0,3,0,0" />
+    </StackPanel>
+    <TabControl Grid.Row="1">
+      <TabItem Header="タイムライン一括編集"><local:TimelineWorkbench/></TabItem>
+      <TabItem Header="動画参照・警告"><local:MediaReferencesView x:Name="MediaPanel"/></TabItem>
+      <TabItem Header="素材ライブラリ">
+        <Grid Margin="12">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+          <Grid x:Name="SearchFiltersPanel">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/><ColumnDefinition Width="135"/>
+              <ColumnDefinition Width="110"/><ColumnDefinition Width="125"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="0,0,8,0">
+              <TextBlock Text="名前・擬音・タグ・説明（空白区切りで絞り込み）"/>
+              <TextBox x:Name="QueryBox" TextChanged="OnQueryChanged" />
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+              <TextBlock Text="場面"/><ComboBox x:Name="SceneBox" SelectionChanged="OnFilterChanged"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Text="素材の種類"/>
+              <ComboBox x:Name="KindBox" SelectedIndex="0" SelectionChanged="OnFilterChanged">
+                <ComboBoxItem Content="すべて"/><ComboBoxItem Content="音声"/>
+                <ComboBoxItem Content="画像"/><ComboBoxItem Content="動画"/>
+              </ComboBox>
+            </StackPanel>
+            <CheckBox Grid.Column="3" x:Name="FavoriteOnly" Content="★ のみ"
+              VerticalAlignment="Center" Checked="OnFilterChanged" Unchecked="OnFilterChanged"/>
+          </Grid>
+          <WrapPanel Grid.Row="1" Margin="0,2,0,7">
+            <StackPanel x:Name="AssetActionsPanel" Orientation="Horizontal" IsEnabled="False">
+              <Button Content="フォルダ追加" Click="OnAddFolder"/>
+              <Button Content="ファイル追加" Click="OnAddFiles"/>
+              <Button Content="再スキャン" Click="OnRescan"/>
+              <Button Content="欠損確認" Click="OnCheckMissing"/>
+            </StackPanel>
+            <Button x:Name="CancelScanButton" Content="処理を中止" Click="OnCancelScan" IsEnabled="False"/>
+          </WrapPanel>
+          <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/><ColumnDefinition Width="8"/><ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="ItemsList" ItemsSource="{Binding Results}"
+              SelectionChanged="OnSelectionChanged" PreviewMouseLeftButtonDown="OnDragStart"
+              PreviewMouseMove="OnDragMove" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+              VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling">
+              <ListView.View>
+                <GridView>
+                  <GridViewColumn Header="★" Width="32" DisplayMemberBinding="{Binding FavoriteMark}"/>
+                  <GridViewColumn Header="名前" Width="220" DisplayMemberBinding="{Binding Title}"/>
+                  <GridViewColumn Header="種類" Width="55" DisplayMemberBinding="{Binding KindText}"/>
+                  <GridViewColumn Header="タグ" Width="180" DisplayMemberBinding="{Binding TagText}"/>
+                  <GridViewColumn Header="状態" Width="100" DisplayMemberBinding="{Binding Availability}"/>
+                </GridView>
+              </ListView.View>
+            </ListView>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center"/>
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+              <StackPanel x:Name="DetailsPanel" IsEnabled="False">
+                <TextBlock Text="選択した素材" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                <TextBlock Text="一覧からYMM4へドラッグできます（要実機確認）"
+                  TextWrapping="Wrap" Margin="0,0,0,8"/>
+                <WrapPanel>
+                  <Button Content="音声試聴" Click="OnPlay"/>
+                  <Button Content="停止" Click="OnStop"/>
+                  <Button Content="場所を開く" Click="OnOpenLocation"/>
+                  <Button Content="パスをコピー" Click="OnCopyPath"/>
+                </WrapPanel>
+                <TextBlock Text="試聴音量"/>
+                <Slider x:Name="VolumeSlider" Minimum="0" Maximum="1" Value="0.35"
+                  ValueChanged="OnVolumeChanged" Margin="0,3,0,12"/>
+                <TextBlock Text="表示名"/><TextBox x:Name="TitleBox"/>
+                <TextBlock Text="タグ（カンマ区切り）"/><TextBox x:Name="TagsBox"/>
+                <Button Content="選んだ場面をタグに追加" Click="OnAddSceneTag"/>
+                <TextBlock Text="説明・擬音・用途"/>
+                <TextBox x:Name="NotesBox" AcceptsReturn="True" Height="65" TextWrapping="Wrap"/>
+                <TextBlock Text="配布元ページURL"/><TextBox x:Name="SourceBox"/>
+                <TextBlock Text="利用条件・クレジットのメモ"/>
+                <TextBox x:Name="LicenseBox" AcceptsReturn="True" Height="55" TextWrapping="Wrap"/>
+                <CheckBox x:Name="FavoriteBox" Content="お気に入り ★" Margin="0,2,0,10"/>
+                <WrapPanel>
+                  <Button Content="変更を保存" Click="OnSaveMetadata"/>
+                  <Button Content="配布元を開く" Click="OnOpenSource"/>
+                </WrapPanel>
+                <Button Content="ライブラリから外す（元ファイルは保持）" Click="OnRemove"/>
+              </StackPanel>
+            </ScrollViewer>
+          </Grid>
+        </Grid>
+      </TabItem>
+      <TabItem Header="プレビュー比較記録">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+          <StackPanel Margin="16">
+            <TextBlock Text="同じ素材・同じ区間を、旧版と新版で比較" FontSize="17" FontWeight="SemiBold"/>
+            <TextBlock Margin="0,8,0,12" TextWrapping="Wrap"
+              Text="この初版は原因の切り分け用です。標準プレビューの描画・デコード処理は変更しません。CPUとメモリを記録します。描画FPSやGPU使用率、プロキシ適用状態は取得していません。"/>
+            <TextBox x:Name="EnvironmentBox" IsReadOnly="True" TextWrapping="Wrap"/>
+            <Grid x:Name="MeasurementFields">
+              <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+              <StackPanel Margin="0,0,12,0">
+                <TextBlock Text="比較ケース名（個人情報やファイルパスを避ける）"/>
+                <TextBox x:Name="CaseBox" Text="比較A・同じ30秒区間"/>
+                <TextBlock Text="テスト条件（手入力）"/>
+                <ComboBox x:Name="ConditionBox" IsEditable="True" Text="元動画のみ">
+                  <ComboBoxItem Content="元動画のみ"/><ComboBoxItem Content="プロキシ生成完了"/>
+                  <ComboBoxItem Content="エフェクトあり"/><ComboBoxItem Content="通常の長いプロジェクト"/>
+                </ComboBox>
+              </StackPanel>
+              <StackPanel>
+                <TextBlock Text="ハードウェアデコード（設定を見て記入）"/>
+                <ComboBox x:Name="DecoderBox" IsEditable="True" Text="不明">
+                  <ComboBoxItem Content="不明"/><ComboBoxItem Content="DXVA2"/>
+                  <ComboBoxItem Content="D3D11"/><ComboBoxItem Content="無効"/>
+                </ComboBox>
+                <TextBlock Text="プロキシ名・状態（設定を見て記入）"/>
+                <TextBox x:Name="ProxyBox" Text="不明"/>
+              </StackPanel>
+            </Grid>
+            <TextBlock Text="観察した症状・時刻（手入力）"/>
+            <TextBox x:Name="SymptomBox" AcceptsReturn="True" TextWrapping="Wrap" Height="60"/>
+            <WrapPanel Margin="0,5,0,8">
+              <Button x:Name="MeasureButton" Content="10秒計測（YMM4で再生してから押す）" Click="OnMeasure"/>
+              <Button x:Name="CancelMeasureButton" Content="計測中止" Click="OnCancelMeasure" IsEnabled="False"/>
+              <Button Content="最後の記録に症状を反映" Click="OnUpdateObservation"/>
+              <Button Content="比較記録を保存" Click="OnExportDiagnostics"/>
+            </WrapPanel>
+            <TextBlock x:Name="MeasurementStatus" Text="計測はまだ行っていません。" Margin="0,0,0,10" TextWrapping="Wrap"/>
+            <TextBox x:Name="ReportBox" IsReadOnly="True" AcceptsReturn="True" TextWrapping="NoWrap"
+              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="230"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="使い方・素材の入手">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+          <StackPanel Margin="20">
+            <TextBlock Text="手持ち素材から、使いたいものへ" FontSize="18" FontWeight="SemiBold"/>
+            <TextBlock TextWrapping="Wrap" Margin="0,12,0,10"
+              Text="1. 素材フォルダまたはファイルを追加します。元ファイルはコピー・変更しません。&#10;2. 名前、擬音、説明、タグで検索します。場面選択はローカル辞書で絞り込みます。&#10;3. 表示名、タグ、配布元、利用条件を編集して「変更を保存」を押します。&#10;4. 音声を試聴し、一覧からYMM4のタイムラインへドラッグします。受け取り方は実機確認が必要です。&#10;5. 動画・画像は初版では検索と受け渡しのみです。音声試聴の形式はWindowsの再生対応に依存します。"/>
+            <TextBlock TextWrapping="Wrap" Margin="0,0,0,15"
+              Text="AI契約は不要です。EditAssist独自のAI送信はありません。台本の音声生成はYMM4の設定済みエンジンを使用します。クラウド音声の送信・課金・利用条件は設定に従います。素材は配布元で利用条件を確認して取得してください。第三者の音源は同梱していません。"/>
+            <WrapPanel>
+              <Button Content="効果音ラボのページ" Click="OnSoundEffectLab"/>
+              <Button Content="OtoLogicのページ" Click="OnOtoLogic"/>
+              <Button Content="YMM4公式・プレビューFAQ" Click="OnPreviewFaq"/>
+              <Button Content="素材データの場所" Click="OnOpenCatalogFolder"/>
+            </WrapPanel>
+            <TextBlock Text="最新版への移行" FontSize="16" FontWeight="SemiBold" Margin="0,18,0,8"/>
+            <TextBlock TextWrapping="Wrap"
+              Text="今使っているYMM4と最新版を別フォルダで保持し、プロジェクトのコピーを使って比較してください。旧版で使う本番プロジェクトを新版で上書きしないでください。初版の比較記録は診断材料であり、プレビュー不調が直ったことの証明ではありません。"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </TabControl>
+    <TextBlock Grid.Row="2" Text="{Binding Status}" TextWrapping="Wrap" Margin="0,10,0,0"/>
+  </Grid>
+</UserControl>
+

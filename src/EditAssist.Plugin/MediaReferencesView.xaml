@@ -1,0 +1,52 @@
+<UserControl x:Class="EditAssist.Plugin.MediaReferencesView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" MinWidth="600" MinHeight="460"
+ Background="#252525" Foreground="#EEEEEE">
+ <UserControl.Resources>
+  <Style TargetType="Button"><Setter Property="Margin" Value="0,0,8,6"/><Setter Property="Padding" Value="10,6"/><Setter Property="Foreground" Value="#222222"/><Setter Property="Background" Value="#EEEEEE"/></Style>
+  <Style TargetType="TextBox"><Setter Property="Padding" Value="6"/><Setter Property="Foreground" Value="#222222"/><Setter Property="Background" Value="#FFFFFF"/></Style>
+  <Style TargetType="CheckBox"><Setter Property="Foreground" Value="#EEEEEE"/><Setter Property="Margin" Value="0,4,14,6"/></Style>
+ </UserControl.Resources>
+ <ScrollViewer VerticalScrollBarVisibility="Auto">
+  <StackPanel Margin="18">
+   <TextBlock Text="動画参照の一括修復・警告" FontSize="20" Margin="0,0,0,8"/>
+   <TextBlock x:Name="MediaConnectionText" Text="プロジェクトを接続待ち" Foreground="#FFD887" TextWrapping="Wrap"/>
+   <WrapPanel Margin="0,10,0,0">
+    <Button x:Name="InspectButton" Content="参照先を確認" Click="InspectClick"/>
+    <Button x:Name="DecodeButton" Content="映像も確認（数か所）" Click="DecodeClick"/>
+    <Button x:Name="CancelMediaButton" Content="検査を中止" Click="CancelClick" IsEnabled="False"/>
+    <Button x:Name="BaselineButton" Content="現在の参照を比較基準に保存" Click="BaselineClick"/>
+   </WrapPanel>
+   <CheckBox x:Name="WatchBox" Content="この画面を開いている間、15秒ごとに参照切れ・変更を簡易確認" IsChecked="True"/>
+   <TextBlock x:Name="MediaStatusText" Text="初回の確認で比較用記録を作ります。以後は参照パス・サイズ・更新日時の違いを警告します。" TextWrapping="Wrap" Foreground="#FFD887" Margin="0,0,0,8"/>
+   <DataGrid x:Name="MediaList" Height="220" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+     SelectionChanged="MediaSelectionChanged" Background="#FFFFFF" Foreground="#222222" HeadersVisibility="Column">
+    <DataGrid.RowStyle><Style TargetType="DataGridRow"><Setter Property="Background" Value="#FFFFFF"/><Setter Property="Foreground" Value="#222222"/><Style.Triggers><DataTrigger Binding="{Binding IsWarning}" Value="True"><Setter Property="Background" Value="#FFF0CC"/></DataTrigger></Style.Triggers></Style></DataGrid.RowStyle>
+    <DataGrid.Columns>
+     <DataGridTextColumn Header="ファイル名" Binding="{Binding FileName}" Width="220"/>
+     <DataGridTextColumn Header="分割数" Binding="{Binding ClipCount}" Width="65"/>
+     <DataGridTextColumn Header="状態" Binding="{Binding Result}" Width="115"/>
+     <DataGridTextColumn Header="参照先" Binding="{Binding FilePath}" Width="320"/>
+     <DataGridTextColumn Header="詳細・警告" Binding="{Binding Warning}" Width="500"/>
+    </DataGrid.Columns>
+   </DataGrid>
+   <TextBlock x:Name="MediaDetailText" Text="一覧を選択すると詳細とファイル名を表示します。" TextWrapping="Wrap" Margin="0,8,0,12"/>
+   <TextBlock Text="同じ名前の動画を全シーンで再参照" FontSize="17"/>
+   <TextBlock Text="対象ファイル名（拡張子を含む）" Margin="0,8,0,4"/>
+   <TextBox x:Name="FilenameBox"/>
+   <TextBlock Text="移動先フォルダー" Margin="0,8,0,4"/>
+   <TextBox x:Name="DirectoryBox"/>
+   <WrapPanel Margin="0,8,0,0">
+    <Button x:Name="FolderButton" Content="フォルダーを選択" Click="FolderClick"/>
+    <Button x:Name="VideoButton" Content="移動先動画から指定" Click="VideoClick"/>
+    <CheckBox x:Name="RecursiveBox" Content="下位フォルダーも検索" IsChecked="True"/>
+   </WrapPanel>
+   <WrapPanel>
+    <Button x:Name="PrepareRelinkButton" Content="変更内容を確認" Click="PrepareClick"/>
+    <Button x:Name="ApplyRelinkButton" Content="バックアップして全件再参照" Click="ApplyClick" IsEnabled="False"/>
+   </WrapPanel>
+   <TextBlock x:Name="RelinkPlanText" Text="同名候補が複数ある場合は停止します。再参照だけでは元動画の内容が同じとは保証できません。" TextWrapping="Wrap" Margin="0,4,0,8"/>
+   <TextBlock TextWrapping="Wrap" Foreground="#BBBBBB" Text="・カット位置／長さ／レイヤー／トランジションは変えません。ロックされた対象がある場合は停止します。&#10;・変更前の復旧用YMMPを自動保存します。YMM4の「元に戻す」も使えます。変更後は通常のプロジェクト保存をしてください。&#10;・映像検査はFFmpegで先頭＋使用開始位置を最大3か所確認します。動画全編・音声・別リーダーの不具合は保証できません。&#10;・タイムアウトは「未確認」です。自動で素材を削除・置換しません。"/>
+  </StackPanel>
+ </ScrollViewer>
+</UserControl>

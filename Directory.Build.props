@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <!-- Build.ps1 reads the real YMM4 runtimeconfig and overrides this. -->
+    <RuntimeMajor Condition="'$(RuntimeMajor)' == ''">10</RuntimeMajor>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <Version>0.4.0</Version>
+    <PathMap>$(MSBuildThisFileDirectory)=/src/</PathMap>
+  </PropertyGroup>
+</Project>
+
