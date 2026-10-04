@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net$(RuntimeMajor).0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF><EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <AssemblyName>YMM4.EditAssist.VersionManager</AssemblyName>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../EditAssist.Versioning/EditAssist.Versioning.csproj" />
+    <Reference Include="YukkuriMovieMaker.Plugin"><HintPath>$(Ymm4Directory)/YukkuriMovieMaker.Plugin.dll</HintPath><Private>false</Private></Reference>
+    <EmbeddedResource Include="Apply-Version.ps1" />
+  </ItemGroup>
+</Project>

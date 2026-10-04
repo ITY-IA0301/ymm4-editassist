@@ -11,5 +11,6 @@
     <Reference Include="YukkuriMovieMaker.Settings"><HintPath>$(Ymm4Directory)\YukkuriMovieMaker.Settings.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Newtonsoft.Json"><HintPath>$(Ymm4Directory)\Newtonsoft.Json.dll</HintPath><Private>false</Private></Reference>
     <ProjectReference Include="..\..\src\EditAssist.Plugin\EditAssist.Plugin.csproj" />
+    <ProjectReference Include="..\..\src\EditAssist.VersionManager\EditAssist.VersionManager.csproj" />
   </ItemGroup>
 </Project>

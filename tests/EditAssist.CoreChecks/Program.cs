@@ -190,6 +190,7 @@ try
     MustThrow<InvalidDataException>(() => SpeakingStyle.Extract("キャラ,セリフ"), "empty style corpus rejected");
     MustThrow<ArgumentException>(() => SpeakingStyle.Settings("", new string('a', 10001), true, "", false), "oversized style rejected");
     await CodexProviderChecks.RunAsync(testRoot, Check);
+    VersionPackageChecks.Run(testRoot, Check);
     Console.WriteLine($"All {passed} checks passed.");
 }
 catch (Exception error)
@@ -201,5 +202,4 @@ finally
 {
     try { Directory.Delete(testRoot, true); } catch (IOException) { }
 }
-
 

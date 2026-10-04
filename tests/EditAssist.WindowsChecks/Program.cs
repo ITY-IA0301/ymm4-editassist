@@ -57,6 +57,13 @@ internal static class Program
             Check(toolType.GetProperty("AllowMultipleInstances")!.GetValue(tool) is false,
                 "tool refuses duplicate instances");
             var view = new EditAssistView { DataContext = new EditAssistViewModel() };
+            var managerTool = new EditAssist.VersionManager.VersionManagerPlugin();
+            Check(managerTool.ViewType == typeof(EditAssist.VersionManager.VersionManagerView), "version manager factory returns independent view");
+            Check(!typeof(EditAssist.VersionManager.VersionManagerView).Assembly.GetReferencedAssemblies().Any(x => x.Name is "YMM4.EditAssist" or "EditAssist.Core"), "version manager survives EditAssist downgrade without loading its assemblies");
+            var manager = new EditAssist.VersionManager.VersionManagerView();
+            Check(manager.Content is Grid, "version manager compiled XAML creates control tree");
+            foreach (var name in new[] { "CurrentText", "VersionsList", "ApplyButton", "StatusText" })
+                Check(manager.FindName(name) is FrameworkElement, "version manager field exists: " + name);
             Check(view.Content is Grid, "compiled XAML creates the control tree");
             Check(view.FindName("MediaPanel") is MediaReferencesView, "EditAssist hosts the video reference tab");
             Check(!assembly.GetReferencedAssemblies().Any(x => x.Name is "YMM4.PreviewLite" or "0Harmony"),
@@ -94,4 +101,3 @@ internal static class Program
         }
     }
 }
-

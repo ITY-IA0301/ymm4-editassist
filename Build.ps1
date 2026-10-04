@@ -89,6 +89,9 @@ try {
         Invoke-Dotnet -Arguments @('build', 'tests/EditAssist.WindowsChecks/EditAssist.WindowsChecks.csproj',
             '-c', 'Release', "-p:RuntimeMajor=$runtimeMajor", "-p:Ymm4Directory=$Ymm4Directory", '--output', $windowsOutput)
         Invoke-Dotnet -Arguments @((Join-Path $windowsOutput 'EditAssist.WindowsChecks.dll'), $Ymm4Directory)
+        Invoke-Dotnet -Arguments @('build', 'src/EditAssist.VersionManager/EditAssist.VersionManager.csproj',
+            '-c', 'Release', "-p:RuntimeMajor=$runtimeMajor", "-p:Ymm4Directory=$Ymm4Directory", '--output', (Join-Path $artifacts "version-manager\net$runtimeMajor"))
+        & (Join-Path $PSScriptRoot 'tests/VersionSwitchChecks.ps1')
     }
     finally { Pop-Location }
 
@@ -121,6 +124,24 @@ try {
     finally { $packageArchive.Dispose(); $packageStream.Dispose() }
     Move-Item -LiteralPath $zipPath -Destination $packagePath -Force
 
+    # The manager is an independent plugin so downgrading EditAssist never removes the selector.
+    $managerPackage = Join-Path $artifacts "EditAssist-VersionManager-$releaseVersion-net$runtimeMajor.ymme"
+    $managerOutput = Join-Path $artifacts "version-manager\net$runtimeMajor"
+    if (Test-Path -LiteralPath $managerPackage) { Remove-Item -LiteralPath $managerPackage }
+    $managerStream = [IO.File]::Open($managerPackage, [IO.FileMode]::CreateNew)
+    $managerArchive = [IO.Compression.ZipArchive]::new($managerStream, [IO.Compression.ZipArchiveMode]::Create)
+    try {
+        foreach ($name in @('YMM4.EditAssist.VersionManager.dll', 'EditAssist.Versioning.dll')) {
+            [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($managerArchive, (Join-Path $managerOutput $name), $name) | Out-Null
+        }
+        [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($managerArchive, (Join-Path $PSScriptRoot 'docs/VERSION-MANAGER.md'), 'README.md') | Out-Null
+        foreach ($past in Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'archive/EditAssist') -Recurse -File -Filter '*.ymme') {
+            if ($past.Name -eq [IO.Path]::GetFileName($packagePath)) { continue }
+            [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($managerArchive, $past.FullName, ('versions/' + $past.Name)) | Out-Null
+        }
+        [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($managerArchive, $packagePath, ('versions/' + [IO.Path]::GetFileName($packagePath))) | Out-Null
+    } finally { $managerArchive.Dispose(); $managerStream.Dispose() }
+
     $buildInfo = "YMM4 $hostVersion / .NET $runtimeMajor`r`nSDK: $selectedSdk`r`nBuilt: $([DateTimeOffset]::Now.ToString('o'))`r`nSource: EditAssist $releaseVersion`r`nCore checks: passed`r`nWPF construction and synthetic actual-host timeline editing/backup/undo checks: passed`r`nLive YMM4 UI/playback/drop/speech-generation verification: not yet performed`r`n"
     [IO.File]::WriteAllText((Join-Path $artifacts "build-info-net$runtimeMajor.txt"), $buildInfo, [Text.UTF8Encoding]::new($false))
     if ($Install) {
@@ -142,9 +163,12 @@ try {
         foreach ($dllName in $allowedAssemblies) {
             Copy-Item -LiteralPath (Join-Path $stage $dllName) -Destination (Join-Path $destination $dllName) -Force
         }
+        $managerDestination = Join-Path $Ymm4Directory 'user\plugin\EditAssistVersionManager'
+        [IO.Compression.ZipFile]::ExtractToDirectory($managerPackage, $managerDestination, $true)
         Write-Host 'EditAssistを配置しました。YMM4を起動し、ツールメニューで確認してください。' -ForegroundColor Green
     }
     Write-Host "パッケージを作成しました：$packagePath" -ForegroundColor Green
+    Write-Host "バージョン選択ツール：$managerPackage" -ForegroundColor Green
     Write-Host 'これはビルド成功です。YMM4での読み込み・試聴・受け渡しは実機確認してください。'
     $publishConfigPath = Join-Path $PSScriptRoot 'GitHubPublish.local.json'
     if (Test-Path -LiteralPath $publishConfigPath) {
@@ -162,5 +186,3 @@ catch {
     Write-Host $_.Exception.Message -ForegroundColor Red
     exit 1
 }
-
-

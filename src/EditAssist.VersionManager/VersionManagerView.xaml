@@ -1,0 +1,22 @@
+<UserControl x:Class="EditAssist.VersionManager.VersionManagerView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Width="720" Height="520" MinWidth="560" MinHeight="420" Loaded="OnLoaded"
+ Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+ Foreground="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}">
+ <Grid Margin="20">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <StackPanel><TextBlock Text="EditAssistのバージョンを選ぶ" FontSize="24" FontWeight="SemiBold"/>
+   <TextBlock x:Name="CurrentText" Margin="0,8" TextWrapping="Wrap"/>
+  </StackPanel>
+  <TextBlock Grid.Row="1" Margin="0,0,0,12" TextWrapping="Wrap" Text="選んだ版への切替はYMM4終了後に行います。プロジェクトを保存してから終了し、切替完了後にYMM4を起動してください。旧版へ戻しても、この選択画面は使えます。"/>
+  <ListBox Grid.Row="2" x:Name="VersionsList" DisplayMemberPath="Display" SelectionChanged="OnSelectionChanged"/>
+  <WrapPanel Grid.Row="3" Margin="0,12,0,8">
+   <Button x:Name="ApplyButton" Content="選んだ版へ切替を予約" Padding="12,7" Margin="0,0,8,6" Click="OnApply" IsEnabled="False"/>
+   <Button Content=".ymmeを追加" Padding="12,7" Margin="0,0,8,6" Click="OnImport"/>
+   <Button Content="一覧を更新" Padding="12,7" Margin="0,0,8,6" Click="OnRefresh"/>
+   <Button Content="切替ログ・バックアップ" Padding="12,7" Margin="0,0,8,6" Click="OnOpenHistory"/>
+  </WrapPanel>
+  <TextBlock Grid.Row="4" x:Name="StatusText" TextWrapping="Wrap"/>
+ </Grid>
+</UserControl>

@@ -4,11 +4,13 @@
 
 ## 最新版のソース
 
+0.5.2で独立したバージョン選択ツールを追加。YMM4内で過去版・最新版を選び、終了後に切替。バックアップと独立管理画面を保持します。184項目のCore検証、6項目の切替fixture、クロスビルドに成功。Windows実機は未検証です。
+
 0.5.1で語尾・話し方の手動指定と参考台本の特徴抽出を追加。163項目の検証とクロスビルド成功。Windows実機と実AI接続は未検証です。
 
 0.5.0のChatGPT支援・字幕調整を作業ブランチに追加。公式YMM4 4.56.1.0を参照したクロスビルド版で、Windows実機と実AI接続は未検証です。
 
-- リポジトリのルート：EditAssist 0.5.1。ソース管理用のGitHub登録処理も含みます。
+- リポジトリのルート：EditAssist 0.5.2。ソース管理用のGitHub登録処理も含みます。
 - [plugins/PreviewLite](../plugins/PreviewLite)：PreviewLite 0.3.0の独立したソース。EditAssistに組み込んだり、同じDLLへまとめたりしていません。
 
 このページは`docs`内にあるため、PreviewLiteのリンクは [リポジトリ上のフォルダー](https://github.com/ITY-IA0301/ymm4-editassist/tree/main/plugins/PreviewLite)も利用できます。
@@ -38,4 +40,3 @@
 - 各版の説明・確認済み項目は、その版のZIP内のREADMEと検証記録を参照してください。実際のYMM4で未確認の内容を、GitHubへの保存だけで確認済みに変更していません。
 - 動画、YMMP、プロジェクトのバックアップ、個人設定、チャット履歴、YMM4本体は保管対象外です。PreviewLiteのHarmonyは元のMITライセンス文とともに保存します。
 - この登録は既存の非公開リポジトリへの保管です。一般公開・GitHub Releasesの公開・新しいライセンスの選択は行っていません。
-

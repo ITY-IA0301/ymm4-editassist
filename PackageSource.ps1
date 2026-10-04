@@ -17,6 +17,7 @@ foreach ($folder in @('src', 'tests', 'docs')) {
     $files += Get-ChildItem -LiteralPath (Join-Path $root $folder) -Recurse -File |
         Where-Object { $_.Name -notlike '*_wpftmp.csproj' -and $_.FullName.Substring($root.Length) -notmatch '(^|[\\/])(bin|obj|artifacts)([\\/]|$)' }
 }
+$files += Get-ChildItem -LiteralPath (Join-Path $root 'archive/EditAssist') -Recurse -File -Filter '*.ymme'
 $stream = [IO.File]::Open($Destination, [IO.FileMode]::CreateNew)
 $archive = [IO.Compression.ZipArchive]::new($stream, [IO.Compression.ZipArchiveMode]::Create)
 try {
@@ -28,4 +29,3 @@ try {
 }
 finally { $archive.Dispose(); $stream.Dispose() }
 Write-Host "ソースZIPを保存しました：$Destination（$($files.Count)ファイル）"
-

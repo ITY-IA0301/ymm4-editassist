@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\EditAssist.Core\EditAssist.Core.csproj" />
+    <ProjectReference Include="..\..\src\EditAssist.Versioning\EditAssist.Versioning.csproj" />
   </ItemGroup>
 </Project>
 
