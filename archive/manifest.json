@@ -1,95 +1,123 @@
 {
-    "recorded_date":  "2026-10-03",
-    "original_packages":  [
-                              {
-                                  "path":  "archive/EditAssist/0.1.0/EditAssist-0.1.0-net10.ymme",
-                                  "bytes":  51191,
-                                  "sha256":  "BDB98536733D41FDFE1B16AAF584412643DB0F213E5133E574B7C53A787CE80A",
-                                  "git_blob_sha":  "8cc734f2507f69fcac6350cd5980b30aca06f8c9"
-                              },
-                              {
-                                  "path":  "archive/EditAssist/0.1.0/YMM4-EditAssist-0.1.0-source.zip",
-                                  "bytes":  45543,
-                                  "sha256":  "4207CA2CD86A681B6C06F5574E2E5D98B73D2414AC949EB43124210434741669",
-                                  "git_blob_sha":  "3afd34008934fcc55c8019f87dc69cdecbd29fba"
-                              },
-                              {
-                                  "path":  "archive/EditAssist/0.2.0/EditAssist-0.2.0-net10.ymme",
-                                  "bytes":  97803,
-                                  "sha256":  "08CB3D238B078C81210ECEDD128326EFFAE3ED9AC88B166C3298402895C854CF",
-                                  "git_blob_sha":  "224dd6661c93c6211af2e1ead09a7f2973134fa2"
-                              },
-                              {
-                                  "path":  "archive/EditAssist/0.2.0/YMM4-EditAssist-0.2.0-source.zip",
-                                  "bytes":  79417,
-                                  "sha256":  "2040CF497E7B300799C4FBD4F538B0F9813BABE762465E2A4B9433308A6504CA",
-                                  "git_blob_sha":  "2541d9cbe643a1d99c05d3760713f596c88594ea"
-                              },
-                              {
-                                  "path":  "archive/EditAssist/0.3.0/EditAssist-0.3.0-net10.ymme",
-                                  "bytes":  130696,
-                                  "sha256":  "D889A24B50B4ADFB3933DA80B7D2EC55D259AAB2DB324B12864E8FAA07F0BBEF",
-                                  "git_blob_sha":  "e41d73ff9cdf61b7c7e0f8b75c89973d073dbee2"
-                              },
-                              {
-                                  "path":  "archive/EditAssist/0.3.0/YMM4-EditAssist-0.3.0-source.zip",
-                                  "bytes":  107375,
-                                  "sha256":  "4FAFC6047215658A7A8F072AFA06ABC614875E5D8850AA77566239DD875E7995",
-                                  "git_blob_sha":  "fe3aaf42ac084adf147f186b35a0c2ea8937dd97"
-                              },
-                              {
-                                  "path":  "archive/EditAssist/0.4.0/EditAssist-0.4.0-net10.ymme",
-                                  "bytes":  139098,
-                                  "sha256":  "6456646AC59EEFCD1C41693129E5470253AD319E60E1D134BB9ECB0D94AB64F8",
-                                  "git_blob_sha":  "d0db493c44e908789cfc3b8bf32b203ee900bcb8"
-                              },
-                              {
-                                  "path":  "archive/EditAssist/0.4.0/YMM4-EditAssist-0.4.0-source.zip",
-                                  "bytes":  118304,
-                                  "sha256":  "D12284C396A354F9B7E3FF8F1E7654076646E37E363B6FB8C9860D5476639776",
-                                  "git_blob_sha":  "87ad1880ad18fb117d1bff349f028d336632c35c"
-                              },
-                              {
-                                  "path":  "archive/EditAssist/0.4.0/YMM4-EditAssist-0.4.0-source-github.zip",
-                                  "bytes":  125121,
-                                  "sha256":  "10302E1D47687D7A1B041AE907B6842E2313735AA63A147AB508B710D72FFC17",
-                                  "git_blob_sha":  "8cebfe101a084fbd2428f055d2c57defd86f7713"
-                              },
-                              {
-                                  "path":  "archive/PreviewLite/0.1.0/PreviewLite-0.1.0-net10.ymme",
-                                  "bytes":  834173,
-                                  "sha256":  "1E7FE2ECEDBB506CB10CC797E1AC693B3F78AFCB08FC87CE5D2079B2904D6529",
-                                  "git_blob_sha":  "3bf1e5f1de6abf10cbe1f017c2fbbcb4823249f9"
-                              },
-                              {
-                                  "path":  "archive/PreviewLite/0.1.0/YMM4-PreviewLite-0.1.0-source.zip",
-                                  "bytes":  834043,
-                                  "sha256":  "481D1643236B83EB2A1B210312D8670C2DF5D168FA773D6B7C538C13A6D720FC",
-                                  "git_blob_sha":  "c5cc87bb38123141d4621d4dd7722b1dd51fb419"
-                              },
-                              {
-                                  "path":  "archive/PreviewLite/0.2.0/PreviewLite-0.2.0-net10.ymme",
-                                  "bytes":  867947,
-                                  "sha256":  "C67B4913D6C9C1CA7B763DDE58B1488097CC3BC542ACA3DDAC29AA27303CC241",
-                                  "git_blob_sha":  "1e662d0b3e57cca09ea6a0af53a44072a7290bcb"
-                              },
-                              {
-                                  "path":  "archive/PreviewLite/0.2.0/YMM4-PreviewLite-0.2.0-source.zip",
-                                  "bytes":  859680,
-                                  "sha256":  "56CE19E9A14A1D396E0CCEC26836B1F7669DCBB463144787ACC2309FE61A40AA",
-                                  "git_blob_sha":  "311da6fcfa62ed7a1511a8010a2ee56ebf8e7a12"
-                              },
-                              {
-                                  "path":  "archive/PreviewLite/0.3.0/PreviewLite-0.3.0-net10.ymme",
-                                  "bytes":  834485,
-                                  "sha256":  "E64391116E70F10791C948BD2E557F3805559D200D2D89B64424C4B1D3D3C853",
-                                  "git_blob_sha":  "073b0a5c6b42bc1b80705ba2980d15be6d8856b1"
-                              },
-                              {
-                                  "path":  "archive/PreviewLite/0.3.0/YMM4-PreviewLite-0.3.0-source.zip",
-                                  "bytes":  834714,
-                                  "sha256":  "A4929784ACE1EE50B544FE75070DD29A3E9D9A0E4FCADAF2DD70F58D4E928924",
-                                  "git_blob_sha":  "3d4ae0c167e724bdb85c98e79cd4fb378ce9a6d0"
-                              }
-                          ]
+  "recorded_date": "2026-10-04",
+  "original_packages": [
+    {
+      "path": "archive/EditAssist/0.1.0/EditAssist-0.1.0-net10.ymme",
+      "bytes": 51191,
+      "sha256": "BDB98536733D41FDFE1B16AAF584412643DB0F213E5133E574B7C53A787CE80A",
+      "git_blob_sha": "8cc734f2507f69fcac6350cd5980b30aca06f8c9"
+    },
+    {
+      "path": "archive/EditAssist/0.1.0/YMM4-EditAssist-0.1.0-source.zip",
+      "bytes": 45543,
+      "sha256": "4207CA2CD86A681B6C06F5574E2E5D98B73D2414AC949EB43124210434741669",
+      "git_blob_sha": "3afd34008934fcc55c8019f87dc69cdecbd29fba"
+    },
+    {
+      "path": "archive/EditAssist/0.2.0/EditAssist-0.2.0-net10.ymme",
+      "bytes": 97803,
+      "sha256": "08CB3D238B078C81210ECEDD128326EFFAE3ED9AC88B166C3298402895C854CF",
+      "git_blob_sha": "224dd6661c93c6211af2e1ead09a7f2973134fa2"
+    },
+    {
+      "path": "archive/EditAssist/0.2.0/YMM4-EditAssist-0.2.0-source.zip",
+      "bytes": 79417,
+      "sha256": "2040CF497E7B300799C4FBD4F538B0F9813BABE762465E2A4B9433308A6504CA",
+      "git_blob_sha": "2541d9cbe643a1d99c05d3760713f596c88594ea"
+    },
+    {
+      "path": "archive/EditAssist/0.3.0/EditAssist-0.3.0-net10.ymme",
+      "bytes": 130696,
+      "sha256": "D889A24B50B4ADFB3933DA80B7D2EC55D259AAB2DB324B12864E8FAA07F0BBEF",
+      "git_blob_sha": "e41d73ff9cdf61b7c7e0f8b75c89973d073dbee2"
+    },
+    {
+      "path": "archive/EditAssist/0.3.0/YMM4-EditAssist-0.3.0-source.zip",
+      "bytes": 107375,
+      "sha256": "4FAFC6047215658A7A8F072AFA06ABC614875E5D8850AA77566239DD875E7995",
+      "git_blob_sha": "fe3aaf42ac084adf147f186b35a0c2ea8937dd97"
+    },
+    {
+      "path": "archive/EditAssist/0.4.0/EditAssist-0.4.0-net10.ymme",
+      "bytes": 139098,
+      "sha256": "6456646AC59EEFCD1C41693129E5470253AD319E60E1D134BB9ECB0D94AB64F8",
+      "git_blob_sha": "d0db493c44e908789cfc3b8bf32b203ee900bcb8"
+    },
+    {
+      "path": "archive/EditAssist/0.4.0/YMM4-EditAssist-0.4.0-source.zip",
+      "bytes": 118304,
+      "sha256": "D12284C396A354F9B7E3FF8F1E7654076646E37E363B6FB8C9860D5476639776",
+      "git_blob_sha": "87ad1880ad18fb117d1bff349f028d336632c35c"
+    },
+    {
+      "path": "archive/EditAssist/0.4.0/YMM4-EditAssist-0.4.0-source-github.zip",
+      "bytes": 125121,
+      "sha256": "10302E1D47687D7A1B041AE907B6842E2313735AA63A147AB508B710D72FFC17",
+      "git_blob_sha": "8cebfe101a084fbd2428f055d2c57defd86f7713"
+    },
+    {
+      "path": "archive/PreviewLite/0.1.0/PreviewLite-0.1.0-net10.ymme",
+      "bytes": 834173,
+      "sha256": "1E7FE2ECEDBB506CB10CC797E1AC693B3F78AFCB08FC87CE5D2079B2904D6529",
+      "git_blob_sha": "3bf1e5f1de6abf10cbe1f017c2fbbcb4823249f9"
+    },
+    {
+      "path": "archive/PreviewLite/0.1.0/YMM4-PreviewLite-0.1.0-source.zip",
+      "bytes": 834043,
+      "sha256": "481D1643236B83EB2A1B210312D8670C2DF5D168FA773D6B7C538C13A6D720FC",
+      "git_blob_sha": "c5cc87bb38123141d4621d4dd7722b1dd51fb419"
+    },
+    {
+      "path": "archive/PreviewLite/0.2.0/PreviewLite-0.2.0-net10.ymme",
+      "bytes": 867947,
+      "sha256": "C67B4913D6C9C1CA7B763DDE58B1488097CC3BC542ACA3DDAC29AA27303CC241",
+      "git_blob_sha": "1e662d0b3e57cca09ea6a0af53a44072a7290bcb"
+    },
+    {
+      "path": "archive/PreviewLite/0.2.0/YMM4-PreviewLite-0.2.0-source.zip",
+      "bytes": 859680,
+      "sha256": "56CE19E9A14A1D396E0CCEC26836B1F7669DCBB463144787ACC2309FE61A40AA",
+      "git_blob_sha": "311da6fcfa62ed7a1511a8010a2ee56ebf8e7a12"
+    },
+    {
+      "path": "archive/PreviewLite/0.3.0/PreviewLite-0.3.0-net10.ymme",
+      "bytes": 834485,
+      "sha256": "E64391116E70F10791C948BD2E557F3805559D200D2D89B64424C4B1D3D3C853",
+      "git_blob_sha": "073b0a5c6b42bc1b80705ba2980d15be6d8856b1"
+    },
+    {
+      "path": "archive/PreviewLite/0.3.0/YMM4-PreviewLite-0.3.0-source.zip",
+      "bytes": 834714,
+      "sha256": "A4929784ACE1EE50B544FE75070DD29A3E9D9A0E4FCADAF2DD70F58D4E928924",
+      "git_blob_sha": "3d4ae0c167e724bdb85c98e79cd4fb378ce9a6d0"
+    },
+    {
+      "path": "archive/EditAssist/0.5.0/EditAssist-0.5.0-net10.ymme",
+      "bytes": 173440,
+      "sha256": "18E993ADF65572120EAE8BDB365D46E706AC8149488A562A9373BC1E7FF720BB",
+      "git_blob_sha": "7eed49f3e177f229f4a41d60a677290fa6f2cffb",
+      "build_scope": "Linux cross-build; Windows/live ChatGPT unverified"
+    },
+    {
+      "path": "archive/EditAssist/0.5.0/YMM4-EditAssist-0.5.0-source.zip",
+      "bytes": 160807,
+      "sha256": "4765897F6C7FFA28A20B6DC78ACF1C85C4AE77E020477DD9A2429A7C38FF8F50",
+      "git_blob_sha": "6d7c8f5ba3e35cc7f22cc29f6a0062db03480671",
+      "build_scope": "Linux cross-build; Windows/live ChatGPT unverified"
+    },
+    {
+      "path": "archive/EditAssist/0.5.1/EditAssist-0.5.1-net10.ymme",
+      "bytes": 184197,
+      "sha256": "21325197323199E4FBC1DF08BB2DFF41145572C8A661A15C10F596B8E8EEA313",
+      "git_blob_sha": "3eaf922f7778e715916b0fbde1c844857fb2b42d",
+      "build_scope": "163 core checks; Linux cross-build passed; Windows/live ChatGPT unverified"
+    },
+    {
+      "path": "archive/EditAssist/0.5.1/YMM4-EditAssist-0.5.1-source.zip",
+      "bytes": 168226,
+      "sha256": "11FB9026175AB17440294467BD631A80F108762592B04D8F8F158928643231CE",
+      "git_blob_sha": "7b4e26e7cc6b6755a9ffd22ee89af604e746f382",
+      "build_scope": "163 core checks; Linux cross-build passed; Windows/live ChatGPT unverified"
+    }
+  ]
 }

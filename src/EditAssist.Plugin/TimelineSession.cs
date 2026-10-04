@@ -21,11 +21,13 @@ public sealed class PreparedEdit
     public required IReadOnlyList<EditItem> Snapshot { get; init; }
     public IReadOnlyList<IItem> Additions { get; init; } = [];
     public EditPreset? Preset { get; init; }
+    internal IReadOnlyList<IItem> RemoveItems { get; init; } = [];
+    internal IReadOnlyList<int> HideVoiceSubtitles { get; init; } = [];
 }
 
 internal sealed record CheckedTimelineState(string Fingerprint, IReadOnlyList<IItem> OriginalItems, IReadOnlyList<EditItem> Snapshot);
 
-public sealed class TimelineSession(TimelineToolInfo info)
+public sealed partial class TimelineSession(TimelineToolInfo info)
 {
     public TimelineToolInfo Info { get; } = info;
     private (string After, IReadOnlyList<Action> Undo, IReadOnlyList<Animatable> Touched)? last;
@@ -218,6 +220,7 @@ public sealed class TimelineSession(TimelineToolInfo info)
                     }
                     else Scalar(property, value);
                 }
+                if (prepared.HideVoiceSubtitles.Contains(c.Key)) Scalar("JimakuVisibility", JimakuVisibility.Hidden);
                 if (c.Frame.HasValue) Scalar("Frame", c.Frame.Value);
                 if (c.Length.HasValue) Scalar("Length", c.Length.Value);
                 if (c.Layer.HasValue) Scalar("Layer", c.Layer.Value);
@@ -238,10 +241,10 @@ public sealed class TimelineSession(TimelineToolInfo info)
                         Set(property, value);
                 }
             }
-            if (prepared.Additions.Count > 0)
+            if (prepared.Additions.Count > 0 || prepared.RemoveItems.Count > 0)
             {
                 var before = Info.Timeline.Items; undo.Add(() => Info.Timeline.Items = before);
-                Info.Timeline.Items = before.AddRange(prepared.Additions);
+                Info.Timeline.Items = before.RemoveRange(prepared.RemoveItems).AddRange(prepared.Additions);
             }
             foreach (var item in touched.OfType<Animatable>()) await item.EndEditAsync();
             Info.Timeline.RefreshTimelineLengthAndMaxLayer();
@@ -358,3 +361,4 @@ public sealed class TimelineSession(TimelineToolInfo info)
             Fingerprint = prepared.Fingerprint, Additions = additions };
     }
 }
+

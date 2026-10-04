@@ -16,3 +16,7 @@ GitHubPublish.local.json
 # Deliberate, original historical packages (other generated packages stay ignored).
 !archive/**/*.zip
 !archive/**/*.ymme
+
+
+# WPF cross-compilation temporary projects
+*_wpftmp.csproj

@@ -6,8 +6,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
-    <Version>0.4.0</Version>
+    <Version>0.5.1</Version>
     <PathMap>$(MSBuildThisFileDirectory)=/src/</PathMap>
   </PropertyGroup>
 </Project>
+
 

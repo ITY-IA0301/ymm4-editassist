@@ -64,7 +64,7 @@ try {
     function Add-SourceFolder {
         param([string]$Folder)
         foreach ($entry in Get-ChildItem -LiteralPath (Join-Path $sourceRoot $Folder) -Force) {
-            if ($entry.Name -in @('bin', 'obj', 'artifacts', '.git', '.vs')) { continue }
+            if ($entry.Name -in @('bin', 'obj', 'artifacts', '.git', '.vs') -or $entry.Name -like '*_wpftmp.csproj') { continue }
             if ($entry.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw "Linked source is not supported: $Folder/$($entry.Name)" }
             if ($entry.PSIsContainer) { Add-SourceFolder ($Folder + '/' + $entry.Name) }
             elseif ($entry.Extension -in $extensions) { $script:publishNames.Add($Folder + '/' + $entry.Name) }
@@ -140,3 +140,4 @@ try {
     Write-Host "GitHub updated and verified: $ExpectedRemote ($($names.Count) source files, $head)" -ForegroundColor Green
 }
 finally { $env:GIT_TERMINAL_PROMPT = $previousPrompt }
+

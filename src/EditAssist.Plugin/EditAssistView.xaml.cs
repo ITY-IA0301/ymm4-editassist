@@ -30,6 +30,16 @@ public partial class EditAssistView : UserControl
     public EditAssistView()
     {
         InitializeComponent();
+        AiPanel.MaterialSource = () => catalog.Entries.Select(x => x.Clone()).ToArray();
+        AiPanel.TransferScript = csv => { TimelinePanel.ImportAiScript(csv); MainTabs.SelectedIndex = 0; };
+        AiPanel.OpenMaterial = id =>
+        {
+            if (!ready || busy) throw new InvalidOperationException("素材ライブラリの読み込みが終わるまで待ってください。");
+            if (!ResolveUnsaved()) return;
+            var material = catalog.Entries.FirstOrDefault(x => x.Id == id) ?? throw new InvalidOperationException("素材が見つかりません。");
+            QueryBox.Text = ""; KindBox.SelectedIndex = 0; SceneBox.SelectedIndex = 0; FavoriteOnly.IsChecked = false;
+            ShowResults(); ItemsList.SelectedItem = vm?.Results.FirstOrDefault(x => x.Id == id); MainTabs.SelectedIndex = 4;
+        };
         searchTimer.Tick += (_, _) =>
         {
             searchTimer.Stop();
@@ -477,4 +487,5 @@ public partial class EditAssistView : UserControl
         catch (Exception ex) { MeasurementStatus.Text = $"保存できませんでした：{ex.Message}"; }
     }
 }
+
 

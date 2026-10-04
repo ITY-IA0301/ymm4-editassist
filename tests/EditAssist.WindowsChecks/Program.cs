@@ -81,6 +81,7 @@ internal static class Program
             TimelineChecks.Run(Check);
             MediaChecks.Run(Check);
             WorkflowChecks.Run(Check);
+            SubtitleAiChecks.Run(Check);
             if (sampleProject is not null) Task.Run(() => ReadOnlyProjectProbe.RunAsync(sampleProject)).GetAwaiter().GetResult();
             application.Shutdown();
             Console.WriteLine($"All {passed} Windows smoke checks passed. Live YMM4 playback/drop remain untested.");
@@ -93,3 +94,4 @@ internal static class Program
         }
     }
 }
+

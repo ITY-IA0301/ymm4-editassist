@@ -177,6 +177,19 @@ try
         "process measurement returns bounded CPU and positive memory");
     EditingChecks.Run(testRoot, Check);
     WorkflowChecks.Run(Check);
+    SubtitleAiChecks.Run(Check);
+    var style = SpeakingStyle.Extract("キャラ,セリフ\n霊夢,そうね。\n魔理沙,いいんだぜ！\n霊夢,わかったよ。");
+    Check(style.Contains("【霊夢】参考セリフ 2件") && style.Contains("【魔理沙】参考セリフ 1件"), "style separates characters");
+    Check(style.Contains("そうね") && style.Contains("いいんだぜ"), "style preserves reference examples");
+    Check(SpeakingStyle.Settings("base", "manual", false, "learned", false) == "base", "both style switches off exclude references");
+    Check(!SpeakingStyle.Settings("", "manual", true, "learned", false).Contains("learned"), "manual only excludes learned examples");
+    Check(!SpeakingStyle.Settings("", "manual", false, "learned", true).Contains("manual"), "learned only excludes manual instructions");
+    var bothStyle = SpeakingStyle.Settings("", "manual", true, "learned", true);
+    Check(bothStyle.Contains("最優先") && bothStyle.Contains("learned"), "both styles preserve manual priority");
+    Check(AiAssist.Prompt(new AiRequest("台本作成", bothStyle, "", [])).Contains("手動指定を優先"), "style priority reaches generated prompt");
+    MustThrow<InvalidDataException>(() => SpeakingStyle.Extract("キャラ,セリフ"), "empty style corpus rejected");
+    MustThrow<ArgumentException>(() => SpeakingStyle.Settings("", new string('a', 10001), true, "", false), "oversized style rejected");
+    await CodexProviderChecks.RunAsync(testRoot, Check);
     Console.WriteLine($"All {passed} checks passed.");
 }
 catch (Exception error)
@@ -188,4 +201,5 @@ finally
 {
     try { Directory.Delete(testRoot, true); } catch (IOException) { }
 }
+
 

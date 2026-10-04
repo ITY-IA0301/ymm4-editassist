@@ -27,10 +27,12 @@
     </Grid.RowDefinitions>
     <StackPanel Margin="0,0,0,10">
       <TextBlock Text="EditAssist" FontSize="24" FontWeight="SemiBold" />
-      <TextBlock Text="ボイス整理・台本・プリセット・素材・動画参照・診断　／　開発版 0.4.0" Margin="0,3,0,0" />
+      <TextBlock Text="ボイス整理・台本・プリセット・素材・動画参照・診断　／　開発版 0.5.0" Margin="0,3,0,0" />
     </StackPanel>
-    <TabControl Grid.Row="1">
-      <TabItem Header="タイムライン一括編集"><local:TimelineWorkbench/></TabItem>
+    <TabControl Grid.Row="1" x:Name="MainTabs">
+      <TabItem Header="タイムライン一括編集"><local:TimelineWorkbench x:Name="TimelinePanel"/></TabItem>
+      <TabItem Header="字幕調整"><local:SubtitleAssistView x:Name="SubtitlePanel"/></TabItem>
+      <TabItem Header="ChatGPT支援"><local:AiAssistView x:Name="AiPanel"/></TabItem>
       <TabItem Header="動画参照・警告"><local:MediaReferencesView x:Name="MediaPanel"/></TabItem>
       <TabItem Header="素材ライブラリ">
         <Grid Margin="12">
@@ -169,7 +171,7 @@
             <TextBlock TextWrapping="Wrap" Margin="0,12,0,10"
               Text="1. 素材フォルダまたはファイルを追加します。元ファイルはコピー・変更しません。&#10;2. 名前、擬音、説明、タグで検索します。場面選択はローカル辞書で絞り込みます。&#10;3. 表示名、タグ、配布元、利用条件を編集して「変更を保存」を押します。&#10;4. 音声を試聴し、一覧からYMM4のタイムラインへドラッグします。受け取り方は実機確認が必要です。&#10;5. 動画・画像は初版では検索と受け渡しのみです。音声試聴の形式はWindowsの再生対応に依存します。"/>
             <TextBlock TextWrapping="Wrap" Margin="0,0,0,15"
-              Text="AI契約は不要です。EditAssist独自のAI送信はありません。台本の音声生成はYMM4の設定済みエンジンを使用します。クラウド音声の送信・課金・利用条件は設定に従います。素材は配布元で利用条件を確認して取得してください。第三者の音源は同梱していません。"/>
+              Text="AI契約は不要です。ChatGPT支援は任意です。Codex生成時だけ、確認した依頼文を送ります。台本の音声生成はYMM4の設定済みエンジンを使用します。クラウド音声の送信・課金・利用条件は設定に従います。素材は配布元で利用条件を確認して取得してください。第三者の音源は同梱していません。"/>
             <WrapPanel>
               <Button Content="効果音ラボのページ" Click="OnSoundEffectLab"/>
               <Button Content="OtoLogicのページ" Click="OnOtoLogic"/>
@@ -186,4 +188,5 @@
     <TextBlock Grid.Row="2" Text="{Binding Status}" TextWrapping="Wrap" Margin="0,10,0,0"/>
   </Grid>
 </UserControl>
+
 

@@ -1,0 +1,51 @@
+<UserControl x:Class="EditAssist.Plugin.SubtitleAssistView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Unloaded="OnUnloaded">
+ <Grid Margin="12">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <TextBlock Text="YMM4で選択したボイス・テキストの字幕を調整します。AIは不要です。" TextWrapping="Wrap"/>
+  <StackPanel Grid.Row="1">
+   <WrapPanel Margin="0,8">
+    <CheckBox x:Name="SplitBox" Content="文章量を調整（分割）" Margin="0,0,20,0" Checked="OnChanged" Unchecked="OnChanged"/>
+    <CheckBox x:Name="ResizeBox" Content="文字サイズを調整" Margin="0,0,20,0" Checked="OnChanged" Unchecked="OnChanged"/>
+    <CheckBox x:Name="WrapBox" Content="改行を調整" Checked="OnChanged" Unchecked="OnChanged"/>
+   </WrapPanel>
+   <WrapPanel>
+    <StackPanel Width="110"><TextBlock Text="1表示の最大文字数"/><TextBox x:Name="CharactersBox" Text="40" TextChanged="OnChanged"/></StackPanel>
+    <StackPanel Width="90"><TextBlock Text="最大行数"/><TextBox x:Name="LinesBox" Text="2" TextChanged="OnChanged"/></StackPanel>
+    <StackPanel Width="110"><TextBlock Text="領域幅（px）"/><TextBox x:Name="WidthBox" Text="1600" TextChanged="OnChanged"/></StackPanel>
+    <StackPanel Width="110"><TextBlock Text="領域高さ（px）"/><TextBox x:Name="HeightBox" Text="220" TextChanged="OnChanged"/></StackPanel>
+    <StackPanel Width="100"><TextBlock Text="最小サイズ"/><TextBox x:Name="MinSizeBox" Text="24" TextChanged="OnChanged"/></StackPanel>
+    <StackPanel Width="100"><TextBlock Text="最大サイズ"/><TextBox x:Name="MaxSizeBox" Text="48" TextChanged="OnChanged"/></StackPanel>
+    <StackPanel Width="90"><TextBlock Text="内側余白（px）"/><TextBox x:Name="PaddingBox" Text="12" TextChanged="OnChanged"/></StackPanel>
+   </WrapPanel>
+   <WrapPanel>
+    <StackPanel Width="110"><TextBlock Text="字幕レイヤー"/><TextBox x:Name="LayerBox" Text="10" TextChanged="OnChanged"/></StackPanel>
+    <StackPanel Width="110"><TextBlock Text="領域中心X"/><TextBox x:Name="XBox" Text="0" TextChanged="OnChanged"/></StackPanel>
+    <StackPanel Width="110"><TextBlock Text="領域中心Y"/><TextBox x:Name="YBox" Text="350" TextChanged="OnChanged"/></StackPanel>
+    <TextBlock Text="X/Yは画面中心からの位置です。空いたレイヤーを指定してください。" VerticalAlignment="Center" TextWrapping="Wrap" Width="390"/>
+   </WrapPanel>
+   <WrapPanel><Button Content="選択字幕の変更プレビュー" Click="OnPrepare"/><Button Content="設定を保存" Click="OnSave"/><Button Content="設定を読み込む" Click="OnLoad"/></WrapPanel>
+  </StackPanel>
+  <Grid Grid.Row="2">
+   <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="100"/></Grid.RowDefinitions>
+   <DataGrid x:Name="PreviewGrid" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False">
+    <DataGrid.Columns>
+     <DataGridTextColumn Header="対象" Binding="{Binding SourceKey}" Width="45"/>
+     <DataGridTextColumn Header="頁" Binding="{Binding Page}" Width="40"/>
+     <DataGridTextColumn Header="開始" Binding="{Binding Frame}" Width="65"/>
+     <DataGridTextColumn Header="長さ" Binding="{Binding Length}" Width="65"/>
+     <DataGridTextColumn Header="字幕" Binding="{Binding Text}" Width="*"/>
+     <DataGridTextColumn Header="サイズ" Binding="{Binding FontSize, StringFormat=F1}" Width="70"/>
+     <DataGridTextColumn Header="判定" Binding="{Binding Status}" Width="75"/>
+    </DataGrid.Columns>
+   </DataGrid>
+   <TextBox Grid.Row="1" x:Name="WarningsBox" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+  </Grid>
+  <StackPanel Grid.Row="3">
+   <CheckBox x:Name="ConfirmBox" Content="変更内容・字幕の置き換え・注意事項を確認した" Margin="0,5"/>
+   <WrapPanel><Button x:Name="ApplyButton" Content="字幕調整を適用" Click="OnApply"/><Button x:Name="RestoreButton" Content="直前の変更を復元" Click="OnRestore"/></WrapPanel>
+   <TextBlock x:Name="StatusText" TextWrapping="Wrap" Text="3機能はすべてOFFです。使う機能を個別に有効にしてください。"/>
+  </StackPanel>
+ </Grid>
+</UserControl>

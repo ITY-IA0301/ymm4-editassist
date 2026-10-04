@@ -101,7 +101,7 @@ try {
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'NOTICES.md') -Destination (Join-Path $stage 'NOTICES.md') -Force
     # Repeated builds must not package a stale or unexpected file.
     $packageNames = @($allowedAssemblies + @('README.md', 'NOTICES.md',
-        'docs/EDITING.md', 'docs/MEDIA-REFERENCES.md', 'docs/WINDOWS-CHECKLIST.md', 'docs/VALIDATION.md'))
+        'docs/AI-SUBTITLES.md', 'docs/EDITING.md', 'docs/MEDIA-REFERENCES.md', 'docs/WINDOWS-CHECKLIST.md', 'docs/VALIDATION.md'))
     $packageBase = Join-Path $artifacts "EditAssist-$releaseVersion-net$runtimeMajor"
     $zipPath = $packageBase + '.zip'
     $packagePath = $packageBase + '.ymme'
@@ -162,4 +162,5 @@ catch {
     Write-Host $_.Exception.Message -ForegroundColor Red
     exit 1
 }
+
 

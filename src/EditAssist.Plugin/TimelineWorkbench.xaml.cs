@@ -220,6 +220,14 @@ public partial class TimelineWorkbench : UserControl
             ParseScript();
         });
     }
+    public void ImportAiScript(string csv)
+    {
+        if (busy) throw new InvalidOperationException("編集中の処理が終わるまで待ってください。");
+        _ = ScriptImport.Parse(csv);
+        ScriptBox.Text = csv; pending = null; script = [];
+        WorkTabs.SelectedIndex = 2;
+        StatusText.Text = "AI台本を受け取りました。台本を解析し、キャラ割当を確認してください。";
+    }
     private void OnScriptChanged(object sender, TextChangedEventArgs e) { pending = null; script = []; }
     private void ParseScript()
     {
@@ -333,3 +341,4 @@ public partial class TimelineWorkbench : UserControl
     });
     private void OnCancel(object sender, RoutedEventArgs e) => cancellation?.Cancel();
 }
+
