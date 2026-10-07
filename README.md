@@ -148,3 +148,8 @@ YMM4を終了し、導入したEditAssistのプラグインフォルダを別の
 - [YMM4公式：プレビュー不調](https://manjubox.net/ymm4/faq/editing/プレビュー画面がフリーズする/)
 - [WPFのフォルダ選択ダイアログ](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/windows/how-to-open-common-system-dialog-box)
 - [ツールプラグインのAPI利用例](https://github.com/routersys/YMM4-Timeline/blob/main/Timeline/TimelineToolPlugin.cs)
+
+
+## OBS録画マーク（付属ツール 0.1.0）
+
+OBSで見せ場・説明・完成をキー記録するLuaスクリプトを追加しました。録画の隣にJSONを保存し、一時停止と分割を追跡します。YMM4は起動不要です。[導入手順](tools/obs-markers/README.md)を参照してください。実OBS・実ゲームでの確認とEditAssistの一覧への取り込みは今後の段階です。
