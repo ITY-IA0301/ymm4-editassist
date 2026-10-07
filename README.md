@@ -140,12 +140,6 @@ YMM4を終了し、導入したEditAssistのプラグインフォルダを別の
 - [ツールプラグインのAPI利用例](https://github.com/routersys/YMM4-Timeline/blob/main/Timeline/TimelineToolPlugin.cs)
 
 
-## OBS RecordMarks（独立ツール 0.1.0）
+## OBS RecordMarks（別プロジェクト）
 
-OBSの録画中にキーで「見せ場・説明・完成・メモ」を記録する独立したLua拡張です。JSONへの保存、一時停止・分割の追跡、取り消しに対応します。オフラインの閲覧ツールで前後を再生し、一覧をCSVへ保存できます。
-
-- [導入手順・使い方](tools/obs-recordmarks/README.md)
-- [導入用ZIP](tools/obs-recordmarks/OBS-RecordMarks-0.1.0.zip?raw=true)
-- [検証範囲](tools/obs-recordmarks/docs/VALIDATION.md)
-
-自動検証は本体41項目・閲覧ツール17項目が成功しています。Windows上の実OBS・実ゲームでの動作と時刻精度は未確認です。時刻は推定で、EditAssistへの読み込みは未実装です。YMM4プラグインとは別にOBSへ導入します。
+録画中の見せ場マークを記録するOBS用Lua拡張は、[独立したリポジトリ](https://github.com/ITY-IA0301/obs-recordmarks)で管理します。ソース・導入用ZIP・閲覧ツール・使い方はリンク先を参照してください。
