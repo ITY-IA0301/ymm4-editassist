@@ -13,7 +13,7 @@ if (Test-Path -LiteralPath $Destination) { throw "同じ名前のZIPが存在し
 $root = [IO.Path]::GetFullPath($PSScriptRoot).TrimEnd('\') + '\'
 $files = @('README.md', 'NOTICES.md', 'CHANGELOG.md', 'Directory.Build.props', '.gitignore', 'Build.cmd', 'Build.ps1', 'PackageSource.ps1', 'PublishGitHub.ps1') |
     ForEach-Object { Get-Item -LiteralPath (Join-Path $root $_) }
-foreach ($folder in @('src', 'tests', 'docs')) {
+foreach ($folder in @('src', 'tests', 'docs', 'tools')) {
     $files += Get-ChildItem -LiteralPath (Join-Path $root $folder) -Recurse -File |
         Where-Object { $_.Name -notlike '*_wpftmp.csproj' -and $_.FullName.Substring($root.Length) -notmatch '(^|[\\/])(bin|obj|artifacts)([\\/]|$)' }
 }
